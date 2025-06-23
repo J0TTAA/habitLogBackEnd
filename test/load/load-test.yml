@@ -1,0 +1,46 @@
+# PC-01, PC-02, PC-03: Pruebas de Capacidad y Carga
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+    - duration: 120
+      arrivalRate: 10
+    - duration: 60
+      arrivalRate: 20
+  processor: "./load-processor.js"
+
+scenarios:
+  - name: "PC-01: 50 tareas creadas"
+    weight: 40
+    flow:
+      - post:
+          url: "/tasks"
+          json:
+            title: "Load test task {{ $randomString() }}"
+            description: "Task created during load test"
+            category: "{{ $randomString() }}"
+      - think: 1
+
+  - name: "PC-02: Subida de imágenes"
+    weight: 30
+    flow:
+      - post:
+          url: "/tasks"
+          json:
+            title: "Image task {{ $randomString() }}"
+            description: "Task for image upload test"
+      - post:
+          url: "/tasks/{{ _id }}/upload-image"
+          formData:
+            image: "@./test-image.jpg"
+      - think: 2
+
+  - name: "PC-03: 20 usuarios simultáneos"
+    weight: 30
+    flow:
+      - get:
+          url: "/tasks"
+      - get:
+          url: "/tasks/progress"
+      - think: 1

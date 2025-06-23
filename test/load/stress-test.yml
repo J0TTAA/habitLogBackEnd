@@ -1,0 +1,47 @@
+# PE-01, PE-02, PE-03: Pruebas de Escalabilidad y Estrés
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 30
+      arrivalRate: 50
+    - duration: 60
+      arrivalRate: 100
+    - duration: 30
+      arrivalRate: 200
+  processor: "./stress-processor.js"
+
+scenarios:
+  - name: "PE-01: 500 tareas seguidas"
+    weight: 50
+    flow:
+      - loop:
+        - post:
+            url: "/tasks"
+            json:
+              title: "Stress task {{ $loopCount }}"
+              description: "High volume task creation"
+        - think: 0.1
+        count: 500
+
+  - name: "PE-02: Carga masiva de imágenes grandes"
+    weight: 30
+    flow:
+      - post:
+          url: "/tasks"
+          json:
+            title: "Large image task"
+            description: "Task for large image upload"
+      - post:
+          url: "/tasks/{{ _id }}/upload-image"
+          formData:
+            image: "@./large-test-image.jpg"
+
+  - name: "PE-03: Datos incompletos o corruptos"
+    weight: 20
+    flow:
+      - post:
+          url: "/tasks"
+          json:
+            title: null
+            description: "{{ $randomString() }}"
+            invalidField: "corrupt data"
