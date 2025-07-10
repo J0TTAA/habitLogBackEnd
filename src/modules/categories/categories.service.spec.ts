@@ -1,9 +1,9 @@
 // PU-02: Pruebas Unitarias - Servicio de Categorías
-import { Test, type TestingModule } from "@nestjs/testing"
-import { CategoriesService } from "./categories.service"
-import { getModelToken } from "@nestjs/mongoose"
-import { Category } from "./schemas/category.schema"
-import { faker } from "@faker-js/faker"
+import { Test, type TestingModule } from "@nestjs/testing";
+import { CategoriesService } from "./categories.service";
+import { getModelToken } from "@nestjs/mongoose";
+import { Category } from "./schemas/category.schema";
+import { faker } from "@faker-js/faker";
 
 describe("CategoriesService - Pruebas Unitarias", () => {
   let service: CategoriesService

@@ -2,8 +2,8 @@
 import { Test, type TestingModule } from "@nestjs/testing"
 import type { INestApplication } from "@nestjs/common"
 import { MongooseModule } from "@nestjs/mongoose"
-import { TasksModule } from "../../src/tasks/tasks.module"
-import { TasksService } from "../../src/tasks/tasks.service"
+import { TasksModule } from "../../src/modules/tasks/tasks.module"
+import { TasksService } from "../../src/modules/tasks/tasks.service"
 import { faker } from "@faker-js/faker"
 
 describe("Database Integration Tests", () => {
